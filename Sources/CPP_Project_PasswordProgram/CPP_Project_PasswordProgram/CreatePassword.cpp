@@ -40,6 +40,7 @@ public:
         return wordNum;
         
     }
+
     //숫자 질문을 출력하고 어떤 질문에 대답할지 제시하는 함수
     int QuestionNum() {
         int numNum;
@@ -137,8 +138,6 @@ public:
             cout << "답변을 입력하세요: ";
             cin >> inPutNum;
 
-            
-
             //단어 길이 제한
 
             string inPutNumStr = to_string(inPutNum);
@@ -170,7 +169,6 @@ public:
     }
  
   //고객이 입력한 정보를 바탕으로 미리 짜여진 조합 방법을 통해 비밀번호를 제작하는 기능
-    
 
     //보안성 하
     void CreatePasswordEasy(string inPutWord, int inPutnum) {
@@ -188,28 +186,42 @@ public:
         // 문자열의 가장 첫번쨰 문자는 대문자로 변환
         string PasswordWord = inPutWord;
         PasswordWord[0] = toupper(inPutWord[0]);
+        
+        
 
         // 문자열 뒷편에 입력받은 숫자 삽입
-        for (int i = 0; i < inPutnum; i++) {
-            PasswordWord += to_string(inPutnum);
-        }
+        string inPutNumStr = to_string(inPutnum);
+
+        PasswordWord += inPutNumStr;
 
         // 입력받은 숫자 뒷편에 선택했던 질문에 해당하는 특수문자를 삽입
-        char specialChar1;
-        char specialChar2;
+        char specialChar1 = '\0';
+        char specialChar2 = '\0';
+        string specialChar1Str;
+        string specialChar2Str;
 
         switch (wordQuestionNum)
         {
         case 1:
             specialChar1 = '!';
+            specialChar1Str = to_string(specialChar1);
+            break;
         case 2:
             specialChar1 = '@';
+            specialChar1Str = to_string(specialChar1);
+            break;
         case 3:
             specialChar1 = '#';
+            specialChar1Str = to_string(specialChar1);
+            break;
         case 4:
             specialChar1 = '$';
+            specialChar1Str = to_string(specialChar1);
+            break;
         case 5:
             specialChar1 = '%';
+            specialChar1Str = to_string(specialChar1);
+            break;
         default:
             break;
         }
@@ -217,20 +229,30 @@ public:
         {
         case 1:
             specialChar2 = '!';
+            specialChar2Str = to_string(specialChar2);
+            break;
         case 2:
             specialChar2 = '@';
+            specialChar2Str = to_string(specialChar2);
+            break;
         case 3:
             specialChar2 = '#';
+            specialChar2Str = to_string(specialChar2);
+            break;
         case 4:
             specialChar2 = '$';
+            specialChar2Str = to_string(specialChar2);
+            break;
         case 5:
             specialChar2 = '%';
+            specialChar2Str = to_string(specialChar2);
+            break;
         default:
             break;
         }
 
-        PasswordWord += to_string(specialChar1);
-        PasswordWord += to_string(specialChar2);
+        PasswordWord += specialChar1Str;
+        PasswordWord += specialChar2Str;
 
         passWord = PasswordWord;
     }
@@ -239,26 +261,141 @@ public:
     }
 
 
+    // 숫자 순서를 뒤집어주는 함수
+    int reverseInt(int num) {
+        int reversed = 0;
+        while (num != 0) {
+            reversed = reversed * 10 + num % 10;
+            num /= 10;
+        }
+        return reversed;
+    }
+
+
     // 보안성 상
-    void CreatePasswordHigh(string inPutWord, int inPutnum, int wordNum, int numNum) {
+    void CreatePasswordHigh(string inPutWord, int inPutnum, int wordQuestionNum, int numQuestionNum) {
+        //짝수번째 문자 대문자 변환
+        string PasswordWord = inPutWord;
+        for (int i = 0; i < inPutWord.length() / 2; i++) {
+            PasswordWord[2 * i] = toupper(inPutWord[2 * i]);
+        }
+
+        int reverseint = reverseInt(inPutnum);
+        string inPutNumStr = to_string(reverseint);
+
+        PasswordWord += inPutNumStr;
+
+        char specialChar1 = '\0';
+        char specialChar2 = '\0';
+        string specialChar1Str;
+        string specialChar2Str;
+
+        switch (wordQuestionNum)
+        {
+        case 1:
+            specialChar1 = '!';
+            specialChar1Str = to_string(specialChar1);
+            break;
+        case 2:
+            specialChar1 = '@';
+            specialChar1Str = to_string(specialChar1);
+            break;
+        case 3:
+            specialChar1 = '#';
+            specialChar1Str = to_string(specialChar1);
+            break;
+        case 4:
+            specialChar1 = '$';
+            specialChar1Str = to_string(specialChar1);
+            break;
+        case 5:
+            specialChar1 = '%';
+            specialChar1Str = to_string(specialChar1);
+            break;
+        default:
+            break;
+        }
+        switch (numQuestionNum)
+        {
+        case 1:
+            specialChar2 = '!';
+            specialChar2Str = to_string(specialChar2);
+            break;
+        case 2:
+            specialChar2 = '@';
+            specialChar2Str = to_string(specialChar2);
+            break;
+        case 3:
+            specialChar2 = '#';
+            specialChar2Str = to_string(specialChar2);
+            break;
+        case 4:
+            specialChar2 = '$';
+            specialChar2Str = to_string(specialChar2);
+            break;
+        case 5:
+            specialChar2 = '%';
+            specialChar2Str = to_string(specialChar2);
+            break;
+        default:
+            break;
+        }
+
+        PasswordWord += specialChar1Str;
+        PasswordWord += specialChar2Str;
+
+        passWord = PasswordWord;
 
     }
     string GetPasswordHigh() {
-
+        return passWord;
     }
 };
 
 
 int main() {
     Password obj;
-
+    string Newpassword;
+    //사용자로부터 여러 답변을 받고 저장
     int wordNum = obj.QuestionWord();
     string inPutWord = obj.InputPassword();
     int numNum = obj.QuestionNum();
     int inPutNum = obj.InputPassNum();
 
-
-
-    cout << inPutWord << " + " << inPutNum;
+    //보안수준 선택
+    while (1) {
+        int how;
+        cout << "보안수준을 선택하세요. " << endl;
+        cout << "1 : 보안수준 하" << endl;
+        cout << "2 : 보안수준 중" << endl;
+        cout << "3 : 보안수준 상" << endl;
+        cout << "보안수준을 선택해주세요(숫자입력) : ";
+        cin >> how;
+        switch (how)
+        {
+        case 1:
+            obj.CreatePasswordEasy(inPutWord, inPutNum);
+            Newpassword = obj.GetPasswordEasy();
+            break;
+        case 2:
+            obj.CreatePasswordMid(inPutWord, inPutNum, wordNum, numNum);
+            Newpassword = obj.GetPasswordMid();
+            break;
+        case 3:
+            obj.CreatePasswordHigh(inPutWord, inPutNum, wordNum, numNum);
+            Newpassword = obj.GetPasswordHigh();
+            break;
+        default:
+            cout << "유효하지 않은 옵션입니다." << endl;
+            continue;
+        }
+        break;
+    }
     
+    cout << "비밀번호 생성중입니다.잠시만 기다려주세요." << endl;
+    cout << "완성된 비밀번호 : " << Newpassword << endl;
+
+    return 0;
 }
+// 수정할 error : 숫자 출력 시 이상한 숫자가 붙어서 나옴
+// 수정할 error : 특수문자가 출력이 안됨
