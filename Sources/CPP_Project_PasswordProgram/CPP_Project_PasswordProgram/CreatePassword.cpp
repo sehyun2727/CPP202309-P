@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 #include <cctype>
+#include <thread>
+#include <chrono>
 
 using namespace std;
 
@@ -187,40 +189,30 @@ public:
         string PasswordWord = inPutWord;
         PasswordWord[0] = toupper(inPutWord[0]);
         
-        
-
         // 문자열 뒷편에 입력받은 숫자 삽입
         string inPutNumStr = to_string(inPutnum);
-
         PasswordWord += inPutNumStr;
 
         // 입력받은 숫자 뒷편에 선택했던 질문에 해당하는 특수문자를 삽입
         char specialChar1 = '\0';
         char specialChar2 = '\0';
-        string specialChar1Str;
-        string specialChar2Str;
 
         switch (wordQuestionNum)
         {
         case 1:
             specialChar1 = '!';
-            specialChar1Str = to_string(specialChar1);
             break;
         case 2:
             specialChar1 = '@';
-            specialChar1Str = to_string(specialChar1);
             break;
         case 3:
             specialChar1 = '#';
-            specialChar1Str = to_string(specialChar1);
             break;
         case 4:
             specialChar1 = '$';
-            specialChar1Str = to_string(specialChar1);
             break;
         case 5:
             specialChar1 = '%';
-            specialChar1Str = to_string(specialChar1);
             break;
         default:
             break;
@@ -229,30 +221,26 @@ public:
         {
         case 1:
             specialChar2 = '!';
-            specialChar2Str = to_string(specialChar2);
             break;
         case 2:
             specialChar2 = '@';
-            specialChar2Str = to_string(specialChar2);
             break;
         case 3:
             specialChar2 = '#';
-            specialChar2Str = to_string(specialChar2);
             break;
         case 4:
             specialChar2 = '$';
-            specialChar2Str = to_string(specialChar2);
             break;
         case 5:
             specialChar2 = '%';
-            specialChar2Str = to_string(specialChar2);
             break;
         default:
             break;
         }
 
-        PasswordWord += specialChar1Str;
-        PasswordWord += specialChar2Str;
+        // 특수 문자를 비밀번호에 추가합니다.
+        PasswordWord += specialChar1;
+        PasswordWord += specialChar2;
 
         passWord = PasswordWord;
     }
@@ -287,30 +275,23 @@ public:
 
         char specialChar1 = '\0';
         char specialChar2 = '\0';
-        string specialChar1Str;
-        string specialChar2Str;
 
         switch (wordQuestionNum)
         {
         case 1:
             specialChar1 = '!';
-            specialChar1Str = to_string(specialChar1);
             break;
         case 2:
             specialChar1 = '@';
-            specialChar1Str = to_string(specialChar1);
             break;
         case 3:
             specialChar1 = '#';
-            specialChar1Str = to_string(specialChar1);
             break;
         case 4:
             specialChar1 = '$';
-            specialChar1Str = to_string(specialChar1);
             break;
         case 5:
             specialChar1 = '%';
-            specialChar1Str = to_string(specialChar1);
             break;
         default:
             break;
@@ -319,30 +300,26 @@ public:
         {
         case 1:
             specialChar2 = '!';
-            specialChar2Str = to_string(specialChar2);
             break;
         case 2:
             specialChar2 = '@';
-            specialChar2Str = to_string(specialChar2);
             break;
         case 3:
             specialChar2 = '#';
-            specialChar2Str = to_string(specialChar2);
             break;
         case 4:
             specialChar2 = '$';
-            specialChar2Str = to_string(specialChar2);
             break;
         case 5:
             specialChar2 = '%';
-            specialChar2Str = to_string(specialChar2);
             break;
         default:
             break;
         }
 
-        PasswordWord += specialChar1Str;
-        PasswordWord += specialChar2Str;
+        // 특수 문자를 비밀번호에 추가합니다.
+        PasswordWord += specialChar1;
+        PasswordWord += specialChar2;
 
         passWord = PasswordWord;
 
@@ -362,7 +339,7 @@ int main() {
     int numNum = obj.QuestionNum();
     int inPutNum = obj.InputPassNum();
 
-    //보안수준 선택
+    //보안수준 선택, 선택된 보안수준에 해당하는 비밀번호 생성
     while (1) {
         int how;
         cout << "보안수준을 선택하세요. " << endl;
@@ -393,6 +370,16 @@ int main() {
     }
     
     cout << "비밀번호 생성중입니다.잠시만 기다려주세요." << endl;
+
+    //3초간 로딩
+    for (int i = 0; i < 3; ++i) {
+        this_thread::sleep_for(chrono::seconds(1));  
+        cout << " .";
+        cout.flush();
+        cout << endl;
+    }
+    cout << endl;
+
     cout << "완성된 비밀번호 : " << Newpassword << endl;
 
     return 0;
