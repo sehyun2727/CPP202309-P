@@ -133,8 +133,8 @@ public:
         return inPutWord;
     }
     // 숫자 답변을 입력받는 함수
-    int InputPassNum() {
-        int inPutNum;
+    string InputPassNum() {
+        string inPutNum;
         while (1) {
 
             cout << "답변을 입력하세요: ";
@@ -142,7 +142,7 @@ public:
 
             //단어 길이 제한
 
-            string inPutNumStr = to_string(inPutNum);
+            string inPutNumStr = inPutNum;
 
             if (inPutNumStr.length() < 3) {
                 cout << "숫자의의 길이가 너무 짧습니다. 다시 입력해주세요" << endl;
@@ -154,14 +154,13 @@ public:
             }
            
             //단어 형태 제한
-            if (inPutNum == 1234) {
+            if (inPutNum == "1234") {
                 cout << "\"1234\" 숫자는 사용할 수 없습니다. 다시 입력해주세요" << endl;
                 continue;
             }
 
-            //todo : 숫자에 문자가 포함되어있는지 확인하고 제한하는 기능
-
-            //todo : 숫자 맨 앞이 0으로 시작할 경우 0을 살리는 기능
+            // todo: 숫자 맨 앞이 0으로 시작할 경우 0을 살리는 기능
+            // -> int형 변수를 string으로 변환하여 해결
 
             break;
         }
@@ -173,9 +172,9 @@ public:
   //고객이 입력한 정보를 바탕으로 미리 짜여진 조합 방법을 통해 비밀번호를 제작하는 기능
 
     //보안성 하
-    void CreatePasswordEasy(string inPutWord, int inPutnum) {
+    void CreatePasswordEasy(string inPutWord, string inPutnum) {
         // 문자열과 숫자를 합쳐 비밀번호 제작
-        passWord = inPutWord + to_string(inPutnum);
+        passWord = inPutWord + inPutnum;
     }
     //제작한 비밀번호를 반환하는 함수
     string GetPasswordEasy() {
@@ -184,13 +183,13 @@ public:
 
 
     // 보안성 중
-    void CreatePasswordMid(string inPutWord, int inPutnum, int wordQuestionNum, int numQuestionNum) {
+    void CreatePasswordMid(string inPutWord, string inPutnum, int wordQuestionNum, int numQuestionNum) {
         // 문자열의 가장 첫번쨰 문자는 대문자로 변환
         string PasswordWord = inPutWord;
         PasswordWord[0] = toupper(inPutWord[0]);
         
         // 문자열 뒷편에 입력받은 숫자 삽입
-        string inPutNumStr = to_string(inPutnum);
+        string inPutNumStr = inPutnum;
         PasswordWord += inPutNumStr;
 
         // 입력받은 숫자 뒷편에 선택했던 질문에 해당하는 특수문자를 삽입
@@ -250,26 +249,24 @@ public:
 
 
     // 숫자 순서를 뒤집어주는 함수
-    int reverseInt(int num) {
-        int reversed = 0;
-        while (num != 0) {
-            reversed = reversed * 10 + num % 10;
-            num /= 10;
+    string reverseInt(string num) {
+        string reversed;
+        for (int j = num.length() - 1; j >= 0; j--) {
+            reversed += num[j];
         }
         return reversed;
     }
 
 
     // 보안성 상
-    void CreatePasswordHigh(string inPutWord, int inPutnum, int wordQuestionNum, int numQuestionNum) {
+    void CreatePasswordHigh(string inPutWord, string inPutnum, int wordQuestionNum, int numQuestionNum) {
         //짝수번째 문자 대문자 변환
         string PasswordWord = inPutWord;
         for (int i = 0; i < inPutWord.length() / 2; i++) {
             PasswordWord[2 * i] = toupper(inPutWord[2 * i]);
         }
 
-        int reverseint = reverseInt(inPutnum);
-        string inPutNumStr = to_string(reverseint);
+        string inPutNumStr = reverseInt(inPutnum);
 
         PasswordWord += inPutNumStr;
 
@@ -327,6 +324,24 @@ public:
     string GetPasswordHigh() {
         return passWord;
     }
+
+    void explainPassword(int how) {
+        cout << "생성된 비밀번호는 다음과 같은 특징을 가집니다:" << endl;
+
+        switch (how) {
+        case 1:
+            cout << "- 비밀번호는 입력한 단어와 숫자를 그대로 연결한 형태입니다." << endl;
+            break;
+        case 2:
+            cout << "- 비밀번호는 영문 답변은 대문자로 변환되었고, 숫자 답변과 선택한 질문에 해당하는 특수문자가 추가되었습니다." << endl;
+            break;
+        case 3:
+            cout << "- 비밀번호는 영문 답변의 짝수번째 글자가 대문자로 변환되었고, 숫자 답변은 거꾸로 배치되었으며, 선택한 질문에 해당하는 특수문자가 추가되었습니다." << endl;
+            break;
+        default:
+            break;
+        }
+    }
 };
 
 
@@ -337,11 +352,11 @@ int main() {
     int wordNum = obj.QuestionWord();
     string inPutWord = obj.InputPassword();
     int numNum = obj.QuestionNum();
-    int inPutNum = obj.InputPassNum();
+    string inPutNum = obj.InputPassNum();
+    int how;
 
     //보안수준 선택, 선택된 보안수준에 해당하는 비밀번호 생성
     while (1) {
-        int how;
         cout << "보안수준을 선택하세요. " << endl;
         cout << "1 : 보안수준 하" << endl;
         cout << "2 : 보안수준 중" << endl;
@@ -382,7 +397,18 @@ int main() {
 
     cout << "완성된 비밀번호 : " << Newpassword << endl;
 
+    cout << "프로그램 종료 0번 비밀번호 설명 1번" << endl;
+    int what;
+    cin >> what;
+    if (what == 1) {
+        obj.explainPassword(how);
+    }
+    else {
+        return 0;
+    }
+    
+
     return 0;
 }
-// 수정할 error : 숫자 출력 시 이상한 숫자가 붙어서 나옴
-// 수정할 error : 특수문자가 출력이 안됨
+
+// 한학기 동안 고생많으셨습니다. 좋은 강의 감사드립니다.
